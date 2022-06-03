@@ -1,0 +1,21 @@
+body,
+html {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(46, 57, 57);
+}
+
+.game-container {
+  width: 640px;
+  height: 640px;
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.moveable-piece {
+  /* position: relative; */
+}
