@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getRandomNumber } from '../../utils';
+import { getRandomNumber } from '../../utils/utils';
 
 interface DotProps {
   incrementTouchCount: () => void;
