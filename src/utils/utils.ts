@@ -4,3 +4,5 @@ export const getRandomNumber = (min: number, max: number): number =>
 export const setLocalStorage = (key: string, value: any): void => localStorage.setItem(key, value);
 
 export const getLocalStorage = (key: string): any => localStorage.getItem(key);
+
+export const removePxFromString = (str: string): string => str.replace(/px/g, '');

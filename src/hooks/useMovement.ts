@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent, useRef } from 'react';
+import { useState, KeyboardEvent, useRef, useEffect } from 'react';
 import useAnimationFrame from './useAnimationFrame';
 import useEvents from './useEvents';
 
@@ -12,7 +12,7 @@ enum Arrows {
 const MOVEMENT_SPEED = 5;
 
 // Takes an element ref and applies Arrow movement to it
-const useMovement = (element: HTMLDivElement) => {
+const useMovement = (element: HTMLDivElement | null) => {
   const [keyDowns, setKeydowns] = useState<string[]>([]);
   const [currentDirection, setCurrentDirection] = useState('');
 
@@ -27,22 +27,23 @@ const useMovement = (element: HTMLDivElement) => {
         }
         if (key in Arrows) {
           setCurrentDirection(key);
-          setKeydowns([...keyDowns, key]);
+          setKeydowns([key, ...keyDowns]);
         }
       },
     },
     {
       event: 'keyup',
       callback: ({ key }: KeyboardEvent) => {
-        if (key in Arrows) {
+        if (key in Arrows && keyDowns.includes(key)) {
           setKeydowns(keyDowns.filter(keyDown => keyDown !== key));
-          if (keyDowns.length <= 1) {
-            setCurrentDirection('');
-          }
         }
       },
     },
   ]);
+
+  useEffect(() => {
+    setCurrentDirection(keyDowns[0]);
+  }, [keyDowns.length]);
 
   useAnimationFrame(() => {
     switch (currentDirection) {

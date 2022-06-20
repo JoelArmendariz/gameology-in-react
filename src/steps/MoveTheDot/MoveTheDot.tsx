@@ -1,26 +1,20 @@
-import { useEffect, useRef } from 'react';
-import { useGameLoopContext } from '../../context/GameLoop/GameLoopProvider';
+import { useRef, forwardRef, useState } from 'react';
 import useCollision from '../../hooks/useCollision';
 import useMovement from '../../hooks/useMovement';
 
 const MoveTheDot = () => {
-  const { startGameLoop, addLoopCallbacks } = useGameLoopContext();
-  const playerRef = useRef<HTMLDivElement>(null);
+  const [playerDotSize, setPlayerDotSize] = useState(5);
+  const playerDotRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
-  // useCollision('player-dot', 'dot-1', () => {
-  //   console.log('COLLISION');
-  // });
-
-  useEffect(() => {
-    startGameLoop();
-    addLoopCallbacks([{ callback: () => console.log('callback1') }]);
-  }, []);
+  useMovement(playerDotRef.current);
+  useCollision(playerDotRef.current, dotRef.current, () => {
+    setPlayerDotSize(playerDotSize * 2);
+  });
 
   return (
     <div>
-      <Dot id="player-dot" />
+      <Dot size={playerDotSize} ref={playerDotRef} />
       <div
-        id="dot-1"
         ref={dotRef}
         style={{
           height: '3rem',
@@ -36,22 +30,13 @@ const MoveTheDot = () => {
   );
 };
 
-const Dot = ({ id }: { id: string }) => {
-  const dotRef = useRef<HTMLDivElement>(null);
-  // useMovement(dotRef.current as HTMLDivElement);
-  const { addLoopCallbacks } = useGameLoopContext();
-
-  useEffect(() => {
-    addLoopCallbacks([{ callback: () => console.log('from the dott') }]);
-  }, []);
-
+const Dot = forwardRef(({ size }: { size: number }, ref: any) => {
   return (
     <div
-      id={id}
-      ref={dotRef}
+      ref={ref}
       style={{
-        height: '3rem',
-        width: '3rem',
+        height: `${size}rem`,
+        width: `${size}rem`,
         borderRadius: '50%',
         backgroundColor: 'grey',
         position: 'relative',
@@ -60,6 +45,6 @@ const Dot = ({ id }: { id: string }) => {
       }}
     />
   );
-};
+});
 
 export default MoveTheDot;
